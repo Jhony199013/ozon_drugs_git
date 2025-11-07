@@ -42,10 +42,10 @@ export default function ScrollToBottomButton({ containerId }: Props) {
     const onResize = () => checkAtBottom();
 
     if (target && target !== window) {
-      (target as HTMLElement).addEventListener("scroll", onScroll, { passive: true } as any);
+      (target as HTMLElement).addEventListener("scroll", onScroll, { passive: true });
       window.addEventListener("resize", onResize);
       return () => {
-        (target as HTMLElement).removeEventListener("scroll", onScroll as any);
+        (target as HTMLElement).removeEventListener("scroll", onScroll);
         window.removeEventListener("resize", onResize);
       };
     } else {

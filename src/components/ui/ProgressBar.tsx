@@ -26,7 +26,6 @@ export default function ProgressBar({ labelTitle, labelPair, current, total, run
 
     // Форсируем reflow, затем запускаем анимацию на все totalMs линейно
     // Работает стабильно, без микроостановок
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     el.getBoundingClientRect();
     if (running && totalMs > 0) {
       el.style.transition = `transform ${totalMs}ms linear`;

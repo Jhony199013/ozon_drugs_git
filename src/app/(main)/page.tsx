@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import DrugSearchInput from "@/components/ui/DrugSearchInput";
 import DrugCard from "@/components/ui/DrugCard";
-import { Drug, supabase } from "@/lib/api/supabase";
+import { Drug, supabase, Cache } from "@/lib/api/supabase";
 import { requestInteractionAnalysis } from "@/lib/api/webhook";
 import ResultCard from "@/components/ui/ResultCard";
 import ProgressBar from "@/components/ui/ProgressBar";
@@ -20,7 +20,7 @@ function uuidv5FromString(input: string): string {
   for (let i = 0; i < buffer.length; i++) {
     hash = (hash + buffer[i]) & 0xffffffff;
   }
-  let hex = ('00000000' + hash.toString(16)).slice(-8);
+  const hex = ('00000000' + hash.toString(16)).slice(-8);
   // дополняем до формата UUID
   return (
     hex.slice(0, 8) + '-' +
@@ -37,7 +37,6 @@ export default function Home() {
   const [selectedDrug1, setSelectedDrug1] = useState<Drug | null>(null);
   const [selectedDrug2, setSelectedDrug2] = useState<Drug | null>(null);
   const [result, setResult] = useState("");
-  const [explanation, setExplanation] = useState("");
   const [loading, setLoading] = useState(false);
   const [polling, setPolling] = useState(false);
   const [showContraindications, setShowContraindications] = useState(false);
@@ -121,7 +120,7 @@ export default function Home() {
     try {
       const parsed = JSON.parse(String(value));
       if (Array.isArray(parsed)) return parsed.map((v) => String(v));
-    } catch (_e) {
+    } catch {
       // игнорируем
     }
     // иначе одна строка
@@ -158,11 +157,11 @@ export default function Home() {
 
         if (cacheData) {
           // Результат найден в кэше
-          setResult(String((cacheData as any).interact || ""));
-          setExplanation(String((cacheData as any).explanation || ""));
-          setPairs(toStringArray((cacheData as any).interact_list));
-          setInteractionsArr(toStringArray((cacheData as any).interact));
-          setExplanationsArr(toStringArray((cacheData as any).explanation));
+          const cache = cacheData as Cache;
+          setResult(String(cache.interact || ""));
+          setPairs(toStringArray(cache.interact_list));
+          setInteractionsArr(toStringArray(cache.interact));
+          setExplanationsArr(toStringArray(cache.explanation));
           setLoading(false);
           return;
         }
@@ -218,11 +217,11 @@ export default function Home() {
         }
 
         if (cacheData) {
-          setResult(String((cacheData as any).interact || ""));
-          setExplanation(String((cacheData as any).explanation || ""));
-          setPairs(toStringArray((cacheData as any).interact_list));
-          setInteractionsArr(toStringArray((cacheData as any).interact));
-          setExplanationsArr(toStringArray((cacheData as any).explanation));
+          const cache = cacheData as Cache;
+          setResult(String(cache.interact || ""));
+          setPairs(toStringArray(cache.interact_list));
+          setInteractionsArr(toStringArray(cache.interact));
+          setExplanationsArr(toStringArray(cache.explanation));
           setPolling(false);
           clearInterval(pollInterval);
         }
@@ -249,7 +248,6 @@ export default function Home() {
     setSelectedDrug1(null);
     setSelectedDrug2(null);
     setResult("");
-    setExplanation("");
     setPolling(false);
     setShowContraindications(false);
     setPairs([]);
@@ -262,7 +260,6 @@ export default function Home() {
     setSelectedDrug1(selectedDrug || null);
     // Сбрасываем результаты при изменении препарата
     setResult("");
-    setExplanation("");
     setShowContraindications(false);
     setPolling(false);
     setPairs([]);
@@ -275,7 +272,6 @@ export default function Home() {
     setSelectedDrug2(selectedDrug || null);
     // Сбрасываем результаты при изменении препарата
     setResult("");
-    setExplanation("");
     setShowContraindications(false);
     setPolling(false);
     setPairs([]);

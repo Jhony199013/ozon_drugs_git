@@ -37,7 +37,7 @@ export default function DrugSearchInput({ value, onChange, placeholder, label }:
         setSearchResults([]);
       } else {
         // Дополнительная фильтрация на клиенте для пустых массивов и строк
-        const filteredData = (data || []).filter((drug: any) => {
+        const filteredData = (data || []).filter((drug: Drug) => {
           const interactions = drug.drug_Interactions;
           if (!interactions) return false;
           if (Array.isArray(interactions)) return interactions.length > 0;

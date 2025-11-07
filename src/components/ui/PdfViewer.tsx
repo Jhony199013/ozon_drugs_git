@@ -5,8 +5,8 @@ import { useEffect, useRef, useState, useMemo } from "react";
 interface PdfViewerProps { url: string }
 
 export default function PdfViewer({ url }: PdfViewerProps) {
-  const [Document, setDocument] = useState<any>(null)
-  const [Page, setPage] = useState<any>(null)
+  const [Document, setDocument] = useState<React.ComponentType<Record<string, unknown>> | null>(null)
+  const [Page, setPage] = useState<React.ComponentType<Record<string, unknown>> | null>(null)
   const [numPages, setNumPages] = useState<number | null>(null)
   const [ready, setReady] = useState(false)
   const [scale, setScale] = useState(1) // стартуем в 100%
