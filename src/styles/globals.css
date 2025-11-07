@@ -1,0 +1,181 @@
+@import "tailwindcss";
+
+:root {
+  /* base colors */
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* app palette */
+  --primary: #01648d;   /* deep blue */
+  --secondary: #0fa5c6; /* cyan */
+  --accent: #38c0d8;    /* light cyan */
+
+  /* primary scale (light -> dark) for UI gradients */
+  --primary-50:  #eaf6fb;
+  --primary-100: #d6eef7;
+  --primary-200: #b9e1f1;
+  --primary-300: #8fd0e8;
+  --primary-400: #64bddc;
+  --primary-500: #3aa7cf;
+  --primary-600: #1e8fbb;
+  --primary-700: #0f769e;
+  --primary-800: #065a7a;
+  --primary-900: #013e56;
+
+  /* surfaces */
+  --surface: color-mix(in oklab, var(--foreground) 6%, var(--background));
+
+  /* computed roles (can be reused for components) */
+  --muted: color-mix(in oklab, var(--foreground) 12%, white);
+  --border: color-mix(in oklab, var(--foreground) 15%, transparent);
+
+  /* status colors (used in UI tags and signals) */
+  --status-danger: #f74040;
+  --status-warning: #f5c812;
+
+  /* success status */
+  --status-success-bg: #bbf7d0; /* green-200 */
+  --status-success-fg: #166534; /* green-800 */
+
+  /* neutral scale (mapping of gray-*) */
+  --neutral-50: #f9fafb;
+  --neutral-100: #f3f4f6;
+  --neutral-200: #e5e7eb;
+  --neutral-300: #d1d5db;
+  --neutral-400: #9ca3af;
+  --neutral-500: #6b7280;
+  --neutral-600: #4b5563;
+  --neutral-700: #374151;
+  --neutral-800: #1f2937;
+  --neutral-900: #111827;
+
+  /* UI tints */
+  --panel-border: #e6eef5;
+  --panel-bg: #f9fbfe;
+  --chip-bg: #e7f5fb;
+  --chip-border: #cfeaf6;
+  --info-bg: #eaf7fc;
+
+  /* explicit blue tones for instruction button */
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --blue-700: #1d4ed8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Pills for keyword highlighting */
+.pill {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+}
+.pill--success {
+  background: var(--status-success-bg);
+  color: var(--status-success-fg);
+}
+.pill--warning {
+  background: var(--status-warning);
+  color: white;
+}
+.pill--danger {
+  background: var(--status-danger);
+  color: white;
+}
+.pill--muted {
+  background: var(--neutral-200);
+  color: var(--neutral-600);
+}
+
+/* Info box for explanations */
+.info-box {
+  background: var(--info-bg);
+  border-left: 4px solid var(--primary);
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding: 0.75rem;
+}
+
+
+/* Scroll-to-bottom floating button */
+.scroll-to-bottom {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 9999px;
+  color: #000000;
+  font-weight: 900;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  background: color-mix(in oklab, var(--primary) 26%, transparent);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  border: 1px solid color-mix(in oklab, var(--primary) 30%, transparent);
+  box-shadow: 0 10px 28px color-mix(in oklab, var(--primary) 28%, transparent);
+  transition: opacity 300ms ease, visibility 300ms ease;
+}
+
+
+
+.scroll-to-bottom--hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* (Удалены keyframes пульсации по запросу) */
+
+/* Pulse wrapper inside the button */
+/* (Удалён внутренний пульс-обёртка по запросу) */
+
+/* Icon inside the button */
+.scroll-to-bottom__icon {
+  width: 24px;
+  height: 24px;
+  transition: transform 200ms ease;
+  transform-origin: center;
+}
+
+.scroll-to-bottom:hover .scroll-to-bottom__icon {
+  transform: scale(1.12);
+}
+
+/* Tooltip fade-in animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.2s ease-out;
+}
+
