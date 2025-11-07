@@ -10,13 +10,30 @@ function getSupabaseClient(): SupabaseClient {
 
   // Пересоздаем клиент, если переменные изменились или клиент еще не создан
   if (!supabaseInstance || cachedUrl !== supabaseUrl || cachedKey !== supabaseAnonKey) {
-    // На этапе сборки (SSR/prerendering) переменные могут быть недоступны
-    // Создаем клиент с placeholder значениями, если переменные не определены
-    // Это позволит сборке пройти успешно
-    const url = supabaseUrl || 'https://placeholder.supabase.co'
-    const key = supabaseAnonKey || 'placeholder-key'
-
-    supabaseInstance = createClient(url, key)
+    // Проверяем, находимся ли мы на этапе сборки (build time)
+    // NEXT_PHASE доступен только во время сборки Next.js
+    const isBuildTime = process.env.NEXT_PHASE === 'phase-production-build'
+    
+    if (isBuildTime) {
+      // На этапе сборки используем placeholder значения, чтобы сборка прошла успешно
+      const url = supabaseUrl || 'https://placeholder.supabase.co'
+      const key = supabaseAnonKey || 'placeholder-key'
+      supabaseInstance = createClient(url, key)
+    } else {
+      // В runtime (production/development) переменные должны быть обязательно установлены
+      if (!supabaseUrl || !supabaseAnonKey) {
+        const missing = []
+        if (!supabaseUrl) missing.push('NEXT_PUBLIC_SUPABASE_URL')
+        if (!supabaseAnonKey) missing.push('NEXT_PUBLIC_SUPABASE_ANON_KEY')
+        throw new Error(
+          `Missing Supabase environment variables: ${missing.join(', ')}. ` +
+          `Please check your environment variables on the server. ` +
+          `Make sure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set.`
+        )
+      }
+      supabaseInstance = createClient(supabaseUrl, supabaseAnonKey)
+    }
+    
     cachedUrl = supabaseUrl
     cachedKey = supabaseAnonKey
   }
