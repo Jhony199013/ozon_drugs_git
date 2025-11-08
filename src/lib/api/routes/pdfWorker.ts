@@ -9,8 +9,10 @@ export async function handleGetPdfWorker() {
 
   const tryLocal = async () => {
     const candidates = [
-      'pdfjs-dist/build/pdf.worker.min.mjs',
+      // Классический worker (`.js`) поддерживается более широким
+      // набором браузеров, включая старые версии Safari/iOS.
       'pdfjs-dist/build/pdf.worker.min.js',
+      'pdfjs-dist/build/pdf.worker.min.mjs',
     ]
     for (const id of candidates) {
       try {
@@ -24,9 +26,6 @@ export async function handleGetPdfWorker() {
           headers: {
             'Content-Type': 'application/javascript; charset=utf-8',
             'Cache-Control': 'public, max-age=31536000, immutable',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
           },
         })
       } catch {}
@@ -36,8 +35,8 @@ export async function handleGetPdfWorker() {
 
   const tryCdn = async () => {
     const cdnCandidates = [
-      'https://unpkg.com/pdfjs-dist@latest/build/pdf.worker.min.mjs',
       'https://unpkg.com/pdfjs-dist@latest/build/pdf.worker.min.js',
+      'https://unpkg.com/pdfjs-dist@latest/build/pdf.worker.min.mjs',
     ]
     for (const url of cdnCandidates) {
       try {
@@ -48,9 +47,6 @@ export async function handleGetPdfWorker() {
           headers: {
             'Content-Type': 'application/javascript; charset=utf-8',
             'Cache-Control': 'public, max-age=31536000, immutable',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
           },
         })
       } catch {}
