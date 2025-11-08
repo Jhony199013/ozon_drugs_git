@@ -6,20 +6,21 @@ export const dynamic = 'force-dynamic'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'GET, HEAD, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Range, If-None-Match, If-Modified-Since',
 }
 
 export async function OPTIONS() {
   return new Response(null, {
     status: 200,
-    headers: corsHeaders
+    headers: corsHeaders,
   })
 }
 
-export async function GET(req: NextRequest) {
-  const response = await handleGetPdf(req)
-  return response
+export async function HEAD(req: NextRequest) {
+  return handleGetPdf(req, 'HEAD')
 }
 
-
+export async function GET(req: NextRequest) {
+  return handleGetPdf(req, 'GET')
+}
