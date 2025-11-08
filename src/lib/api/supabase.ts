@@ -20,16 +20,27 @@ function getSupabaseClient(): SupabaseClient {
       const key = supabaseAnonKey || 'placeholder-key'
       supabaseInstance = createClient(url, key)
     } else {
-      // В runtime (production/development) переменные должны быть обязательно установлены
+      // В runtime проверяем переменные окружения
+      // Если они не установлены, это означает, что проект был собран без них
       if (!supabaseUrl || !supabaseAnonKey) {
         const missing = []
         if (!supabaseUrl) missing.push('NEXT_PUBLIC_SUPABASE_URL')
         if (!supabaseAnonKey) missing.push('NEXT_PUBLIC_SUPABASE_ANON_KEY')
-        throw new Error(
-          `Missing Supabase environment variables: ${missing.join(', ')}. ` +
-          `Please check your environment variables on the server. ` +
-          `Make sure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set.`
-        )
+        
+        // Выбрасываем ошибку с понятным сообщением
+        const errorMessage = 
+          `❌ Отсутствуют переменные окружения Supabase: ${missing.join(', ')}\n\n` +
+          `📋 Решение:\n` +
+          `1. Убедитесь, что файл .env.local существует в корне проекта\n` +
+          `2. Добавьте в него:\n` +
+          `   NEXT_PUBLIC_SUPABASE_URL=ваш_url\n` +
+          `   NEXT_PUBLIC_SUPABASE_ANON_KEY=ваш_key\n` +
+          `3. Пересоберите проект: npm run build\n` +
+          `4. Перезапустите приложение: npm start\n\n` +
+          `⚠️ Важно: переменные NEXT_PUBLIC_* должны быть установлены ДО сборки проекта!`
+        
+        console.error(errorMessage)
+        throw new Error(errorMessage)
       }
       supabaseInstance = createClient(supabaseUrl, supabaseAnonKey)
     }
