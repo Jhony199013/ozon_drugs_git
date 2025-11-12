@@ -1,16 +1,51 @@
 version: "3.9"
 
 services:
-  app:
+  # --- Next.js приложение ---
+  ozon_drug_ui:
+    container_name: ozon_drug_ui
     build: .
-    container_name: ozon_drugs_app
     restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - NEXT_PUBLIC_API_URL=https://test-drugs.ru/api
+    networks:
+      - webnet
+
+  # --- Nginx reverse proxy ---
+  nginx:
+    image: nginx:stable
+    container_name: nginx_ozon_drug
+    restart: always
+    depends_on:
+      - ozon_drug_ui
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      # подключаем сертификаты из хоста в контейнер
-      - ./certs:/etc/letsencrypt:ro
-    environment:
-      - NODE_ENV=production
-      - PORT=3000
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./certs:/etc/letsencrypt
+      - ./certs/www:/var/www/certbot
+    networks:
+      - webnet
+
+  # --- Certbot (для SSL) ---
+  certbot:
+    image: certbot/certbot
+    container_name: certbot_ozon_drug
+    volumes:
+      - ./certs:/etc/letsencrypt
+      - ./certs/www:/var/www/certbot
+    entrypoint: >
+      sh -c "certbot certonly --webroot -w /var/www/certbot
+      --email admin@test-drugs.ru --agree-tos --no-eff-email
+      -d test-drugs.ru -d www.test-drugs.ru || true"
+    networks:
+      - webnet
+
+networks:
+  webnet:
+    driver: bridge
