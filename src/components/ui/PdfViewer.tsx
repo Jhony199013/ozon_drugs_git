@@ -4,18 +4,33 @@ import { useEffect, useRef, useState, useMemo } from "react";
 
 interface PdfViewerProps { url: string }
 
+// Функция для определения мобильного устройства
+const isMobileDevice = (): boolean => {
+  if (typeof window === 'undefined') return false
+  
+  // Проверка user agent на мобильные устройства (iPhone, iPad, Android и т.д.)
+  const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera || ''
+  const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase())
+  
+  // Если это точно мобильное устройство по user agent (iPhone, Android и т.д.), считаем мобильным
+  if (isMobileUA) return true
+  
+  // Проверка на touch-устройство
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+  
+  // Проверка ширины экрана (на iPhone может быть больше 640px из-за Retina, используем 768px)
+  const isSmallScreen = window.innerWidth < 768 || window.screen.width < 768
+  
+  // Если это touch-устройство И маленький экран, то это мобильное
+  return isTouchDevice && isSmallScreen
+}
+
 export default function PdfViewer({ url }: PdfViewerProps) {
   const [Document, setDocument] = useState<React.ComponentType<Record<string, unknown>> | null>(null)
   const [Page, setPage] = useState<React.ComponentType<Record<string, unknown>> | null>(null)
   const [numPages, setNumPages] = useState<number | null>(null)
   const [ready, setReady] = useState(false)
-  // На мобильных устройствах стартуем с 60%, на десктопе с 100%
-  const [scale, setScale] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth < 640 ? 0.6 : 1
-    }
-    return 1
-  })
+  const [scale, setScale] = useState(1) // временно 1, установим правильное значение в useEffect
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [containerWidth, setContainerWidth] = useState(800)
   // Используем абсолютный URL для работы на хостинге
@@ -27,6 +42,13 @@ export default function PdfViewer({ url }: PdfViewerProps) {
   }
 
   const file = useMemo(() => ({ url: `${getApiUrl('/api/pdf')}?url=${encodeURIComponent(url)}` }), [url])
+
+  // Устанавливаем начальный масштаб для мобильных устройств
+  useEffect(() => {
+    if (isMobileDevice()) {
+      setScale(0.6)
+    }
+  }, [])
 
   useEffect(() => {
     let cancelled = false
