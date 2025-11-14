@@ -9,7 +9,13 @@ export default function PdfViewer({ url }: PdfViewerProps) {
   const [Page, setPage] = useState<React.ComponentType<Record<string, unknown>> | null>(null)
   const [numPages, setNumPages] = useState<number | null>(null)
   const [ready, setReady] = useState(false)
-  const [scale, setScale] = useState(1) // стартуем в 100%
+  // На мобильных устройствах стартуем с 60%, на десктопе с 100%
+  const [scale, setScale] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 640 ? 0.6 : 1
+    }
+    return 1
+  })
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [containerWidth, setContainerWidth] = useState(800)
   // Используем абсолютный URL для работы на хостинге
@@ -75,10 +81,7 @@ export default function PdfViewer({ url }: PdfViewerProps) {
       </div>
       <Document file={file} onLoadSuccess={({ numPages }: { numPages: number }) => setNumPages(numPages)} className="w-full flex flex-col items-center" loading={
         <div className="flex items-center justify-center w-full py-8">
-          <div className="flex flex-col items-center gap-3">
-            <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent" />
-            <p className="text-gray-600">Загрузка инструкции...</p>
-          </div>
+          <p className="text-gray-600">Загрузка инструкции...</p>
         </div>
       }>
         {numPages && Array.from({ length: numPages }).map((_, i) => (

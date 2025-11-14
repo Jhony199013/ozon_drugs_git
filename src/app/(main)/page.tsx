@@ -50,6 +50,8 @@ export default function Home() {
   const [currentPairLabel, setCurrentPairLabel] = useState("");
   const [currentPairIndex, setCurrentPairIndex] = useState(1);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isPageReady, setIsPageReady] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
 
   // Парсим действующие вещества в массив (безопасно для любых типов)
   const parseActiveSubstances = (value?: unknown) => {
@@ -113,6 +115,30 @@ export default function Home() {
 
     return () => clearInterval(interval);
   }, [polling, substancePairs]);
+
+  // Предзагрузка логотипа
+  useEffect(() => {
+    const img = new window.Image();
+    img.src = "/Logo_pharmSkills.png";
+    img.onload = () => {
+      setLogoLoaded(true);
+    };
+    img.onerror = () => {
+      // Если изображение не загрузилось, все равно показываем страницу
+      setLogoLoaded(true);
+    };
+  }, []);
+
+  // Проверка готовности страницы
+  useEffect(() => {
+    if (logoLoaded) {
+      // Небольшая задержка для завершения рендеринга всех компонентов
+      const timer = setTimeout(() => {
+        setIsPageReady(true);
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [logoLoaded]);
 
   // Нормализатор: в массив строк
   const toStringArray = (value: unknown): string[] => {
@@ -280,6 +306,19 @@ export default function Home() {
     setInteractionsArr([]);
     setExplanationsArr([]);
   };
+
+  if (!isPageReady) {
+    return (
+      <div className="h-screen bg-background flex flex-col">
+        <header className="bg-primary text-white flex-shrink-0 flex items-center h-16 relative z-[51]">
+          <h1 className="text-lg font-bold px-4" style={{ fontFamily: 'HelveticaNeue-Bold, Arial, sans-serif' }}>
+            Анализ взаимодействия препаратов
+          </h1>
+        </header>
+        <div className="flex-1 bg-[var(--background)]"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen bg-background flex flex-col">
@@ -510,7 +549,7 @@ export default function Home() {
                 </div>
                 
                 <p className="text-[var(--neutral-600)] leading-relaxed -mt-8">
-                  {result || "Здесь появится оценка риска и детали взаимодействия выбранных препаратов. Пожалуйста, выберите два препарата слева и нажмите «Рассчитать»."}
+                  {result || "Здесь появится оценка риска и детали взаимодействия выбранных препаратов. Пожалуйста, выберите два препарата и нажмите «Рассчитать»."}
                 </p>
               </div>
             </div>
