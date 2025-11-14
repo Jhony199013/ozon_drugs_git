@@ -479,19 +479,16 @@ export default function Home() {
           ) : selectedDrug1 && selectedDrug2 ? (
             <div className="flex items-center justify-center h-full">
               <div className="text-center max-w-md">
-                <div className="mx-auto mb-4">
+                <div className="mx-auto mb-1 h-[150px] flex items-center justify-center">
                   <Image
-                    src="/MedInteract.png"
-                    alt="MedInteract"
+                    src="/Logo_pharmSkills.png"
+                    alt="Logo pharmSkills"
                     width={150}
                     height={150}
                     className="mx-auto"
+                    priority
                   />
                 </div>
-                
-                <h2 className="text-primary text-xl font-semibold mb-4">
-                  Готово к анализу
-                </h2>
                 
                 <p className="text-[var(--neutral-600)] leading-relaxed">
                   Препараты выбраны. Нажмите «Рассчитать» для анализа взаимодействия и просмотра противопоказаний.
@@ -501,21 +498,18 @@ export default function Home() {
           ) : (
             <div className="flex items-center justify-center h-full">
               <div className="text-center max-w-md">
-                <div className="mx-auto mb-4">
+                <div className="mx-auto mb-0 h-[150px] flex items-center justify-center">
                   <Image
-                    src="/MedInteract.png"
-                    alt="MedInteract"
+                    src="/Logo_pharmSkills.png"
+                    alt="Logo pharmSkills"
                     width={150}
                     height={150}
                     className="mx-auto"
+                    priority
                   />
                 </div>
                 
-                <h2 className="text-primary text-xl font-semibold mb-4">
-                  Результат взаимодействия
-                </h2>
-                
-                <p className="text-[var(--neutral-600)] leading-relaxed">
+                <p className="text-[var(--neutral-600)] leading-relaxed -mt-8">
                   {result || "Здесь появится оценка риска и детали взаимодействия выбранных препаратов. Пожалуйста, выберите два препарата слева и нажмите «Рассчитать»."}
                 </p>
               </div>
