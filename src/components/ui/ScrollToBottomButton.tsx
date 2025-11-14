@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default function ScrollToBottomButton({ containerId }: Props) {
-  const [hidden, setHidden] = useState(false);
+  const [hidden, setHidden] = useState(true);
   const containerRef = useRef<HTMLElement | Window | null>(null);
 
   const resolveContainer = useCallback(() => {

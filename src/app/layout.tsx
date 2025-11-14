@@ -13,8 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MedInteract - Анализ взаимодействия препаратов",
+  title: "Анализ взаимодействия препаратов",
   description: "Приложение для анализа взаимодействия лекарственных препаратов",
+  other: {
+    "preload-font": "/fonts/HelveticaNeue-Bold.otf",
+  },
 };
 
 export default function RootLayout({
@@ -24,6 +27,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="preload"
+          href="/fonts/HelveticaNeue-Bold.otf"
+          as="font"
+          type="font/otf"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

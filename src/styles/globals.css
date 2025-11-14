@@ -1,5 +1,22 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'HelveticaNeue-Bold';
+  src: url('/fonts/HelveticaNeue-Bold.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: block;
+}
+
+/* Предотвращение дергания текста при загрузке шрифта */
+h1[style*="HelveticaNeue-Bold"],
+a[style*="HelveticaNeue-Bold"] {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  contain: layout style;
+}
+
 :root {
   /* base colors */
   --background: #ffffff;

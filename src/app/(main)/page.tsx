@@ -9,6 +9,7 @@ import { requestInteractionAnalysis } from "@/lib/api/webhook";
 import ResultCard from "@/components/ui/ResultCard";
 import ProgressBar from "@/components/ui/ProgressBar";
 import ScrollToBottomButton from "@/components/ui/ScrollToBottomButton";
+import MobileMenu from "@/components/ui/MobileMenu";
 
 // Подсветка перенесена в утилиту '@/utils/highlight'
 
@@ -48,6 +49,7 @@ export default function Home() {
   const [progressSessionId, setProgressSessionId] = useState(0);
   const [currentPairLabel, setCurrentPairLabel] = useState("");
   const [currentPairIndex, setCurrentPairIndex] = useState(1);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Парсим действующие вещества в массив (безопасно для любых типов)
   const parseActiveSubstances = (value?: unknown) => {
@@ -282,10 +284,95 @@ export default function Home() {
   return (
     <div className="h-screen bg-background flex flex-col">
       {/* Header */}
-      <header className="bg-primary text-white p-4 flex-shrink-0">
-        <h1 className="text-lg font-semibold">
-          MedInteract - Анализ взаимодействия препаратов
+      <header className="bg-primary text-white flex-shrink-0 flex items-center h-16 relative z-[51]">
+        <h1 className="text-lg font-bold px-4" style={{ fontFamily: 'HelveticaNeue-Bold, Arial, sans-serif' }}>
+          Анализ взаимодействия препаратов
         </h1>
+        {/* Desktop menu */}
+        <div className="max-w-[1700px] px-4 flex items-center gap-6 ml-auto hidden md:flex">
+          <a
+            href="/api/redirect/telegram"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-80 transition-opacity flex items-center"
+            aria-label="Telegram"
+          >
+            <Image
+              src="/TG.png"
+              alt="Telegram"
+              width={26}
+              height={26}
+              priority
+            />
+          </a>
+          <a
+            href="/api/redirect/vk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:opacity-80 transition-opacity flex items-center"
+            aria-label="VKontakte"
+          >
+            <Image
+              src="/VK.png"
+              alt="VKontakte"
+              width={26}
+              height={26}
+              priority
+            />
+          </a>
+          <a
+            href="/api/redirect/chatbot"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-base font-bold hover:opacity-80 transition-opacity"
+            style={{ fontFamily: 'HelveticaNeue-Bold, Arial, sans-serif' }}
+          >
+            Чат-бот
+          </a>
+          <a
+            href="/api/redirect/help"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-base font-bold hover:opacity-80 transition-opacity"
+            style={{ fontFamily: 'HelveticaNeue-Bold, Arial, sans-serif' }}
+          >
+            Помощь
+          </a>
+        </div>
+        {/* Mobile menu button */}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="md:hidden px-4 flex items-center justify-center ml-auto"
+          aria-label="Меню"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            {isMobileMenuOpen ? (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            ) : (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            )}
+          </svg>
+        </button>
+        {/* Mobile menu */}
+        <MobileMenu
+          isOpen={isMobileMenuOpen}
+          onClose={() => setIsMobileMenuOpen(false)}
+        />
       </header>
 
       {/* Main Content */}
