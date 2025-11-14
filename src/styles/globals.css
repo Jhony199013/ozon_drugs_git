@@ -76,7 +76,7 @@ a[style*="HelveticaNeue-Bold"] {
   /* explicit blue tones for instruction button */
   --blue-500: #3b82f6;
   --blue-600: #2563eb;
-  --blue-700: #1d4ed8;
+  --blue-700: #0044ff;
 }
 
 @theme inline {
