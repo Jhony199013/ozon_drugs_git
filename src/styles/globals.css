@@ -73,9 +73,7 @@ a[style*="HelveticaNeue-Bold"] {
   --chip-border: #cfeaf6;
   --info-bg: #eaf7fc;
 
-  /* explicit blue tones for instruction button */
-  --blue-500: #3b82f6;
-  --blue-600: #2563eb;
+  /* explicit blue tone for instruction button */
   --blue-700: #0044ff;
 }
 

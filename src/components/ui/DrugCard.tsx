@@ -137,7 +137,7 @@ export default function DrugCard({ drug, position }: DrugCardProps) {
             disabled={!hasInstructionsValue}
             className={`inline-flex items-center gap-1 px-3 py-1.5 text-white text-xs font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 ${
               hasInstructionsValue
-                ? 'bg-blue-700 hover:bg-blue-700/90 focus:ring-blue-700/50 cursor-pointer'
+                ? 'bg-[var(--blue-700)] hover:bg-[var(--blue-700)]/90 focus:ring-[var(--blue-700)]/50 cursor-pointer'
                 : 'bg-[var(--neutral-400)] cursor-not-allowed opacity-60'
             }`}
           >
@@ -273,8 +273,8 @@ export default function DrugCard({ drug, position }: DrugCardProps) {
 
       {/* Попап с инструкцией */}
       {showInstruction && drug.url && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 p-2 sm:p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-full sm:max-w-4xl h-[85vh] sm:h-[80vh] flex flex-col">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-[60] p-0 sm:p-4">
+          <div className="bg-white rounded-none sm:rounded-lg shadow-xl w-full h-full sm:max-w-4xl sm:h-[80vh] flex flex-col">
             {/* Заголовок попапа */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900">

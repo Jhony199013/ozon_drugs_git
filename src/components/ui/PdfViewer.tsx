@@ -30,7 +30,13 @@ export default function PdfViewer({ url }: PdfViewerProps) {
   const [Page, setPage] = useState<React.ComponentType<Record<string, unknown>> | null>(null)
   const [numPages, setNumPages] = useState<number | null>(null)
   const [ready, setReady] = useState(false)
-  const [scale, setScale] = useState(1) // временно 1, установим правильное значение в useEffect
+  // Устанавливаем начальный масштаб: 60% для мобильных, 100% для десктопа
+  const [scale, setScale] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth < 768 ? 0.6 : 1
+    }
+    return 1
+  })
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [containerWidth, setContainerWidth] = useState(800)
   // Используем абсолютный URL для работы на хостинге
@@ -43,9 +49,9 @@ export default function PdfViewer({ url }: PdfViewerProps) {
 
   const file = useMemo(() => ({ url: `${getApiUrl('/api/pdf')}?url=${encodeURIComponent(url)}` }), [url])
 
-  // Устанавливаем начальный масштаб для мобильных устройств
+  // Устанавливаем начальный масштаб для мобильных устройств при монтировании
   useEffect(() => {
-    if (isMobileDevice()) {
+    if (isMobileDevice() && window.innerWidth < 768) {
       setScale(0.6)
     }
   }, [])
