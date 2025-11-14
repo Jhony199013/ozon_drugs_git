@@ -9,7 +9,7 @@ const isMobileDevice = (): boolean => {
   if (typeof window === 'undefined') return false
   
   // Проверка user agent на мобильные устройства (iPhone, iPad, Android и т.д.)
-  const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera || ''
+  const userAgent = navigator.userAgent || navigator.vendor || (window as Window & { opera?: string }).opera || ''
   const isMobileUA = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase())
   
   // Если это точно мобильное устройство по user agent (iPhone, Android и т.д.), считаем мобильным
