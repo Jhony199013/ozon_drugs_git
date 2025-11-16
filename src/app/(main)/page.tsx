@@ -160,23 +160,45 @@ export default function Home() {
       setLoading(true);
       setPolling(false);
       setShowContraindications(true);
-      
+
       try {
-        // Генерируем токен из названий препаратов
-        const drug1Name = drug1.trim().toLowerCase();
-        const drug2Name = drug2.trim().toLowerCase();
-        const sorted = [drug1Name, drug2Name].sort();
-        const pairString = sorted.join('+');
-        const token = uuidv5FromString(pairString);
+        // Генерируем токен из действующих веществ (active_Substance),
+        // независимо от их количества и порядка.
+        const leftSubstances = parseActiveSubstances(
+          selectedDrug1.active_Substance
+        );
+        const rightSubstances = parseActiveSubstances(
+          selectedDrug2.active_Substance
+        );
+
+        const allSubstances = [...leftSubstances, ...rightSubstances]
+          .map((s) => s.trim().toLowerCase())
+          .filter(Boolean);
+
+        let tokenInput: string;
+
+        if (allSubstances.length > 0) {
+          // Убираем дубликаты и сортируем — порядок и количество повторов не влияют
+          const uniqueSorted = Array.from(new Set(allSubstances)).sort();
+          tokenInput = `substances:${uniqueSorted.join("+")}`;
+        } else {
+          // Fallback: если действующие вещества не указаны, используем названия препаратов
+          const drug1Name = drug1.trim().toLowerCase();
+          const drug2Name = drug2.trim().toLowerCase();
+          const sortedNames = [drug1Name, drug2Name].sort();
+          tokenInput = `names:${sortedNames.join("+")}`;
+        }
+
+        const token = uuidv5FromString(tokenInput);
 
         // Проверяем кэш
         const { data: cacheData, error: cacheError } = await supabase
           .from('cache')
           .select('interact, explanation, interact_list')
           .eq('cache_token', token)
-          .single();
+          .maybeSingle();
 
-        if (cacheError && cacheError.code !== 'PGRST116') {
+        if (cacheError) {
           console.error('Cache error:', cacheError);
           setResult("Ошибка при проверке кэша. Попробуйте еще раз.");
           setLoading(false);
@@ -237,9 +259,9 @@ export default function Home() {
           .from('cache')
           .select('interact, explanation, interact_list')
           .eq('cache_token', token)
-          .single();
+          .maybeSingle();
 
-        if (error && error.code !== 'PGRST116') {
+        if (error) {
           console.error('Polling error:', error);
           return;
         }
@@ -328,7 +350,7 @@ export default function Home() {
           Анализ взаимодействия препаратов
         </h1>
         {/* Desktop menu */}
-        <div className="max-w-[1700px] px-4 flex items-center gap-6 ml-auto hidden md:flex">
+        <div className="max-w-[1700px] px-4 flex items-center gap-3 ml-auto hidden md:flex">
           <a
             href="/api/redirect/telegram"
             target="_blank"
@@ -339,8 +361,9 @@ export default function Home() {
             <Image
               src="/TG.png"
               alt="Telegram"
-              width={26}
-              height={26}
+              width={27}
+              height={27}
+              style={{ width: 27, height: 27 }}
               priority
             />
           </a>
@@ -354,8 +377,9 @@ export default function Home() {
             <Image
               src="/VK.png"
               alt="VKontakte"
-              width={26}
-              height={26}
+              width={27}
+              height={27}
+              style={{ width: 27, height: 27 }}
               priority
             />
           </a>
@@ -518,13 +542,14 @@ export default function Home() {
           ) : selectedDrug1 && selectedDrug2 ? (
             <div className="flex items-center justify-center h-full">
               <div className="text-center max-w-md">
-                <div className="mx-auto mb-1 h-[150px] flex items-center justify-center">
+                <div className="mx-auto mb-1 h-[44px] flex items-center justify-center">
                   <Image
                     src="/Logo_pharmSkills.png"
                     alt="Logo pharmSkills"
-                    width={150}
-                    height={150}
+                    width={160}
+                    height={44}
                     className="mx-auto"
+                    style={{ width: 160, height: 44 }}
                     priority
                   />
                 </div>
@@ -537,18 +562,19 @@ export default function Home() {
           ) : (
             <div className="flex items-center justify-center h-full">
               <div className="text-center max-w-md">
-                <div className="mx-auto mb-0 h-[150px] flex items-center justify-center">
+                <div className="mx-auto mb-4 h-[44px] flex items-center justify-center">
                   <Image
                     src="/Logo_pharmSkills.png"
                     alt="Logo pharmSkills"
-                    width={150}
-                    height={150}
+                    width={160}
+                    height={44}
                     className="mx-auto"
+                    style={{ width: 160, height: 44 }}
                     priority
                   />
                 </div>
                 
-                <p className="text-[var(--neutral-600)] leading-relaxed -mt-8">
+                <p className="text-[var(--neutral-600)] leading-relaxed">
                   {result || "Здесь появится оценка риска и детали взаимодействия выбранных препаратов. Пожалуйста, выберите два препарата и нажмите «Рассчитать»."}
                 </p>
               </div>
