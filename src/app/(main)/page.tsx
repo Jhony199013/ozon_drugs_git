@@ -51,7 +51,6 @@ export default function Home() {
   const [currentPairIndex, setCurrentPairIndex] = useState(1);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isPageReady, setIsPageReady] = useState(false);
-  const [logoLoaded, setLogoLoaded] = useState(false);
 
   // Парсим действующие вещества в массив (безопасно для любых типов)
   const parseActiveSubstances = (value?: unknown) => {
@@ -116,29 +115,14 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [polling, substancePairs]);
 
-  // Предзагрузка логотипа
+  // Проверка готовности страницы (Next.js Image сам управляет загрузкой)
   useEffect(() => {
-    const img = new window.Image();
-    img.src = "/Logo_pharmSkills.png";
-    img.onload = () => {
-      setLogoLoaded(true);
-    };
-    img.onerror = () => {
-      // Если изображение не загрузилось, все равно показываем страницу
-      setLogoLoaded(true);
-    };
+    // Небольшая задержка для завершения рендеринга всех компонентов
+    const timer = setTimeout(() => {
+      setIsPageReady(true);
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
-
-  // Проверка готовности страницы
-  useEffect(() => {
-    if (logoLoaded) {
-      // Небольшая задержка для завершения рендеринга всех компонентов
-      const timer = setTimeout(() => {
-        setIsPageReady(true);
-      }, 150);
-      return () => clearTimeout(timer);
-    }
-  }, [logoLoaded]);
 
   // Нормализатор: в массив строк
   const toStringArray = (value: unknown): string[] => {
@@ -363,8 +347,8 @@ export default function Home() {
               alt="Telegram"
               width={27}
               height={27}
-              style={{ width: 27, height: 27 }}
               priority
+              quality={90}
             />
           </a>
           <a
@@ -379,8 +363,8 @@ export default function Home() {
               alt="VKontakte"
               width={27}
               height={27}
-              style={{ width: 27, height: 27 }}
               priority
+              quality={90}
             />
           </a>
           <a
@@ -549,8 +533,8 @@ export default function Home() {
                     width={160}
                     height={44}
                     className="mx-auto"
-                    style={{ width: 160, height: 44 }}
                     priority
+                    quality={90}
                   />
                 </div>
                 
@@ -569,8 +553,8 @@ export default function Home() {
                     width={160}
                     height={44}
                     className="mx-auto"
-                    style={{ width: 160, height: 44 }}
                     priority
+                    quality={90}
                   />
                 </div>
                 

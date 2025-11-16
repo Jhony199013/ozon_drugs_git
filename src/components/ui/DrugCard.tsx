@@ -242,9 +242,10 @@ export default function DrugCard({ drug, position }: DrugCardProps) {
                 <Image
                   src={`/icon_сontraindicated/${item.icon}`}
                   alt={item.description}
-                  width={56}
-                  height={56}
-                  className="mb-1 sm:w-[64px] sm:h-[64px]"
+                  width={64}
+                  height={64}
+                  className="mb-1 w-14 h-14 sm:w-16 sm:h-16"
+                  quality={85}
                 />
                 <span className="text-xs text-center text-gray-700 whitespace-pre-line">
                   {item.description}
@@ -258,9 +259,10 @@ export default function DrugCard({ drug, position }: DrugCardProps) {
                 <Image
                   src={`/icon_caution/${item.icon}`}
                   alt={item.description}
-                  width={56}
-                  height={56}
-                  className="mb-1 sm:w-[64px] sm:h-[64px]"
+                  width={64}
+                  height={64}
+                  className="mb-1 w-14 h-14 sm:w-16 sm:h-16"
+                  quality={85}
                 />
                 <span className="text-xs text-center text-gray-700 whitespace-pre-line">
                   {item.description}

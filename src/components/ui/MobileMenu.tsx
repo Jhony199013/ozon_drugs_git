@@ -26,7 +26,13 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             className="hover:opacity-80 transition-opacity flex items-center"
             aria-label="Telegram"
           >
-            <Image src="/TG.png" alt="Telegram" width={26} height={26} />
+            <Image 
+              src="/TG.png" 
+              alt="Telegram" 
+              width={26} 
+              height={26}
+              quality={90}
+            />
           </a>
           <a
             href="/api/redirect/vk"
@@ -36,7 +42,13 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             className="hover:opacity-80 transition-opacity flex items-center"
             aria-label="VKontakte"
           >
-            <Image src="/VK.png" alt="VKontakte" width={26} height={26} />
+            <Image 
+              src="/VK.png" 
+              alt="VKontakte" 
+              width={26} 
+              height={26}
+              quality={90}
+            />
           </a>
         </div>
         <div className="flex items-center gap-4 ml-auto">
