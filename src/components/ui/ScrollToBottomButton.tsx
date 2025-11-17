@@ -83,14 +83,14 @@ export default function ScrollToBottomButton({ containerId }: Props) {
       >
         <path
           d="M12 3v14"
-          stroke="#000"
+          stroke="currentColor"
           strokeWidth="3"
           strokeLinecap="round"
           fill="none"
         />
         <path
           d="M6 14l6 6 6-6"
-          stroke="#000"
+          stroke="currentColor"
           strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"

@@ -317,7 +317,7 @@ export default function Home() {
     return (
       <div className="h-screen bg-background flex flex-col">
         <header className="bg-primary text-white flex-shrink-0 flex items-center h-16 relative z-[51]">
-          <h1 className="text-lg font-bold px-4" style={{ fontFamily: 'HelveticaNeue-Bold, Arial, sans-serif' }}>
+          <h1 className="text-lg font-bold px-4 font-helvetica-bold">
             Анализ взаимодействия препаратов
           </h1>
         </header>
@@ -330,7 +330,7 @@ export default function Home() {
     <div className="h-screen bg-background flex flex-col">
       {/* Header */}
       <header className="bg-primary text-white flex-shrink-0 flex items-center h-16 relative z-[51]">
-        <h1 className="text-lg font-bold px-4" style={{ fontFamily: 'HelveticaNeue-Bold, Arial, sans-serif' }}>
+        <h1 className="text-lg font-bold px-4 font-helvetica-bold">
           Анализ взаимодействия препаратов
         </h1>
         {/* Desktop menu */}
@@ -371,8 +371,7 @@ export default function Home() {
             href="/api/redirect/chatbot"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-base font-bold hover:opacity-80 transition-opacity"
-            style={{ fontFamily: 'HelveticaNeue-Bold, Arial, sans-serif' }}
+            className="text-base font-bold hover:opacity-80 transition-opacity font-helvetica-bold"
           >
             Чат-бот
           </a>
@@ -380,8 +379,7 @@ export default function Home() {
             href="/api/redirect/help"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-base font-bold hover:opacity-80 transition-opacity"
-            style={{ fontFamily: 'HelveticaNeue-Bold, Arial, sans-serif' }}
+            className="text-base font-bold hover:opacity-80 transition-opacity font-helvetica-bold"
           >
             Помощь
           </a>
@@ -389,7 +387,7 @@ export default function Home() {
         {/* Mobile menu button */}
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden px-4 flex items-center justify-center ml-auto"
+          className="btn-menu-toggle md:hidden ml-auto"
           aria-label="Меню"
         >
           <svg
@@ -446,13 +444,13 @@ export default function Home() {
               <button
                 onClick={handleCalculate}
                 disabled={loading || polling}
-                className="bg-primary text-white py-3 px-6 rounded-md hover:bg-primary/90 transition-colors font-medium disabled:bg-[var(--neutral-400)] disabled:cursor-not-allowed w-full sm:w-auto min-w-[140px]"
+                className="btn btn-primary btn--responsive"
               >
                 {loading ? "Отправка..." : "Рассчитать"}
               </button>
               <button
                 onClick={handleClear}
-                className="bg-[var(--neutral-300)] text-[var(--neutral-700)] py-3 px-6 rounded-md hover:bg-[var(--neutral-400)] transition-colors font-medium w-full sm:w-auto min-w-[140px]"
+                className="btn btn-secondary btn--responsive"
               >
                 Очистить
               </button>

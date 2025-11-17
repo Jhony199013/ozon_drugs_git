@@ -57,8 +57,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={onClose}
-            className="text-base font-bold hover:opacity-80 transition-opacity"
-            style={{ fontFamily: "HelveticaNeue-Bold, Arial, sans-serif" }}
+            className="text-base font-bold hover:opacity-80 transition-opacity font-helvetica-bold"
           >
             Чат-бот
           </a>
@@ -67,8 +66,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={onClose}
-            className="text-base font-bold hover:opacity-80 transition-opacity"
-            style={{ fontFamily: "HelveticaNeue-Bold, Arial, sans-serif" }}
+            className="text-base font-bold hover:opacity-80 transition-opacity font-helvetica-bold"
           >
             Помощь
           </a>
